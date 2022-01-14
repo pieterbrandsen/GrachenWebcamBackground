@@ -12,27 +12,30 @@
             .fadeIn(1000)
             .end()
             .appendTo("#slideshow");
-        }, 5 * 1000);
-      });
-      function update() {
-        const cacheRefreshQuery = `?random=${new Date().getTime()}`;
-        const dayOfMonth = new Date().getDate();
-        const cameraNumbers = [8, 20, 9, 24];
+        }, 1 * 60 * 1000);
 
-        const getUrl = (webcamNumber) =>
-          `https://www.steinbock77.ch/webcam_${webcamNumber}/bilder/mega${new Date().getDate()}.jpg`;
+        function update() {
+          const cacheRefreshQuery = `?random=${new Date().getTime()}`;
+          const dayOfMonth = new Date().getDate();
+          const cameraNumbers = [8, 20, 9, 24];
 
-        for (let i = 0; i < cameraNumbers.length; i++) {
-          const cameraNumber = cameraNumbers[i];
-          if ($(`#${cameraNumber}`).length === 0) {
-            $("#slideshow").append(`<div><img id="${cameraNumber}" /></div>`);
-            continue;
+          const getUrl = (webcamNumber) =>
+            `https://www.steinbock77.ch/webcam_${webcamNumber}/bilder/mega${new Date().getDate()}.jpg`;
+
+          for (let i = 0; i < cameraNumbers.length; i++) {
+            const cameraNumber = cameraNumbers[i];
+            if ($(`#${cameraNumber}`).length === 0) {
+              console.log(`${cameraNumber} has been removed`);
+              $("#slideshow").append(`<div><img id="${cameraNumber}" /></div>`);
+              continue;
+            }
+            $(`#${cameraNumber}`)[0].src = getUrl(cameraNumber);
           }
-          $(`#${cameraNumber}`)[0].src = getUrl(cameraNumber);
         }
-      }
-      update();
-      setInterval(update, 2500);
+        update();
+        setTimeout(update, 1000);
+        setInterval(update, 5 * 60 * 1000);
+      });
     </script>
     <style type="text/css">
       * {
