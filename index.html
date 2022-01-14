@@ -1,50 +1,49 @@
-<head>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-</head>
-<body>
-  <div id="slideshow"></div>
-</body>
-<style type="text/css">
-  * {
-    margin: 0;
-    padding: 0;
-  }
-  img {
-    width: 100%;
-    height: 100%;
-  }
-</style>
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $("#slideshow > div:gt(0)").hide();
 
-<script>
-  $(document).ready(function () {
-    $("#slideshow > div:gt(0)").hide();
+        setInterval(function () {
+          $("#slideshow > div:first")
+            .fadeOut(1000)
+            .next()
+            .fadeIn(1000)
+            .end()
+            .appendTo("#slideshow");
+        }, 5 * 1000);
+      });
+      function update() {
+        const cacheRefreshQuery = `?random=${new Date().getTime()}`;
+        const dayOfMonth = new Date().getDate();
+        const cameraNumbers = [3, 4];
 
-    setInterval(function () {
-      $("#slideshow > div:first")
-        .fadeOut(1000)
-        .next()
-        .fadeIn(1000)
-        .end()
-        .appendTo("#slideshow");
-    }, 5 * 1000);
-  });
-  function update() {
-    const cacheRefreshQuery = `?random=${new Date().getTime()}`;
-    const dayOfMonth = new Date().getDate();
-    const cameraNumbers = [3,4, 5, 6, 7];
+        const getUrl = (webcamNumber) =>
+          `https://www.steinbock77.ch/webcam_${webcamNumber}/bilder/mega${new Date().getDate()}.jpg`;
 
-    const getUrl = (webcamNumber) =>
-      `https://www.steinbock77.ch/webcam_${webcamNumber}/bilder/mega${new Date().getDate()}.jpg`;
-
-    for (let i = 0; i < cameraNumbers.length; i++) {
-      const cameraNumber = cameraNumbers[i];
-      // if element by id is not found create new element
-      if ($(`#${cameraNumber}`).length === 0) {
-        $("#slideshow").append(`<div><img id="${cameraNumber}" /></div>`);
+        for (let i = 0; i < cameraNumbers.length; i++) {
+          const cameraNumber = cameraNumbers[i];
+          if ($(`#${cameraNumber}`).length === 0) {
+            $("#slideshow").append(`<div><img id="${cameraNumber}" /></div>`);
+            continue;
+          }
+          $(`#${cameraNumber}`)[0].src = getUrl(cameraNumber);
+        }
       }
-      $(`#${cameraNumber}`)[0].src = getUrl(cameraNumber);
-    }
-  }
-  update();
-  setInterval(update, 2000);
-</script>
+      update();
+      setInterval(update, 2500);
+    </script>
+    <style type="text/css">
+      * {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="slideshow"></div>
+  </body>
+</html>
