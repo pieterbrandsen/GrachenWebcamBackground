@@ -17,13 +17,13 @@
       function update() {
         const cacheRefreshQuery = `?random=${new Date().getTime()}`;
         const dayOfMonth = new Date().getDate();
-        const cameraNumbers = [8, 20,9,,24];
+        const cameraNumbers = [3, 4];
 
         const getUrl = (webcamNumber) =>
-          `https://www.steinbock77.ch/webcam_${webcamNumber}/bilder/mega15  .jpg`;
+          `https://www.steinbock77.ch/webcam_${webcamNumber}/bilder/mega${new Date().getDate()}.jpg`;
 
-        for (let i = 0; i < 500; i++) {
-          const cameraNumber = i;
+        for (let i = 0; i < cameraNumbers.length; i++) {
+          const cameraNumber = cameraNumbers[i];
           if ($(`#${cameraNumber}`).length === 0) {
             $("#slideshow").append(`<div><img id="${cameraNumber}" /></div>`);
             continue;
