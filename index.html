@@ -1,21 +1,32 @@
-  <img id="image" ></body>
-
+<head>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+  </head>
+  
+<body>
+    <div class="slider">
+      <img id="img" /><img id="img2" /><div class="just_text">This one's just text.</div><img id="img3" /><div><img id="img4" /><span class="caption">This one has a caption</span></div>
+      </div>
+    <!-- <img id="img" > -->
+</body>
   <style type="text/css">
     img {
-        width: 100%;
-        height: 100%;
+        /* width: 100%;
+        height: 100%; */
         }
   </style>
   
   <script>
-    setTimeout(reload, 10 * 60 * 1000);
-    function reload() {
-      window.location.href = window.location.href.split("#")[0];
-      const url = `https://www.steinbock77.ch/webcam_8/bilder/mega${new Date().getDate()}.jpg`;
-      document.getElementById(
-        "image"
-      ).src = url;
-    }
-    reload();
+function update() {
+  const source = `https://picsum.photos/100/100?random=1&${new Date().getTime()}`;
+  const source2 = `https://picsum.photos/100/100?random=2&${new Date().getTime()}`;
+  const source3 = `https://picsum.photos/100/100?random=3&${new Date().getTime()}`;
+  const source4 = `https://picsum.photos/100/100?random=4&${new Date().getTime()}`;
+  document.getElementById("img").src = source;
+  document.getElementById("img2").src = source2;
+  document.getElementById("img3").src = source3;
+  document.getElementById("img4").src = source4;
+  }
+  update();
+  setInterval(update, 1000);
   </script>
   
