@@ -12,16 +12,29 @@
             .fadeIn(1000)
             .end()
             .appendTo("#slideshow");
-        }, 1 * 60 * 1000);
-
-        function update() {
-          const cacheRefreshQuery = `?random=${new Date().getTime()}`;
-          const dayOfMonth = new Date().getDate();
-          const cameraNumbers = [8, 20, 9, 24];
+        }, 1 * 5 * 1000);
+        const cameraNumbers = [8, 20, 9, 24];
+        let firstLoadCameraNumber;
+        
+        function update(isFirstLoad=false) {
+            const cacheRefreshQuery = `?random=${new Date().getTime()}`;
+            const dayOfMonth = new Date().getDate();
+            if (!firstLoadCameraNumber) firstLoadCameraNumber = cameraNumbers[(new Date().getSeconds()) %cameraNumbers.length];
 
           const getUrl = (webcamNumber) =>
             `https://www.steinbock77.ch/webcam_${webcamNumber}/bilder/mega${new Date().getDate()}.jpg`;
 
+            if (isFirstLoad) {
+                const cameraNumber = firstLoadCameraNumber;
+            if ($(`#${cameraNumber}`).length === 0) {
+                $("#slideshow").append(`<div><img id="${cameraNumber}" /></div>`);
+            }
+            else {
+                $(`#${cameraNumber}`)[0].src = getUrl(cameraNumber);
+            }
+            return;
+            }
+                
           for (let i = 0; i < cameraNumbers.length; i++) {
             const cameraNumber = cameraNumbers[i];
             if ($(`#${cameraNumber}`).length === 0) {
@@ -30,11 +43,13 @@
               continue;
             }
             $(`#${cameraNumber}`)[0].src = getUrl(cameraNumber);
-          }
         }
-        update();
-        setTimeout(update, 1000);
-        setInterval(update, 5 * 60 * 1000);
+          }
+        update(true);
+        setTimeout(update, 1000,true);
+        setTimeout(update, 2000,false);
+        setTimeout(update, 3000,false);
+        setInterval(update, 5 * 60 * 1000,false);
       });
     </script>
     <style type="text/css">
