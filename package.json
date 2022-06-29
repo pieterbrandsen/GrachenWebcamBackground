@@ -1,0 +1,22 @@
+{
+    "name": "a",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+      "capture-website": "^2.4.0",
+      "fs": "^0.0.1-security",
+      "html-to-image": "^1.9.0",
+      "node-cron": "^3.0.1",
+      "node-html-to-image": "^3.2.4",
+      "uuid": "^8.3.2",
+      "wallpaper": "^6.1.1"
+    },
+    "type": "module"
+  }
+  
