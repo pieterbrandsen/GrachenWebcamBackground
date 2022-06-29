@@ -1,57 +1,43 @@
-// import captureWebsite from 'capture-website';
-// import {setWallpaper,getWallpaper} from 'wallpaper';
-// import fs from 'fs';
-// import cron from 'node-cron';
+import captureWebsite from 'capture-website';
+import fs from "fs";
+import { getWallpaper, setWallpaper } from "wallpaper";
+import cron from "node-cron";
+import { v4 as uuidv4 } from "uuid";
 
 
+const cameraNumbers = [8, 20, 9, 24];
+let lastCameraNumberIndex = -1;
+const getUrl = (webcamNumber) =>
+  `https://www.steinbock77.ch/webcam_${webcamNumber}/bilder/mega${new Date().getDate()}.jpg`;
 
-// await captureWebsite.file('https://pieterbrandsen.github.io/GrachenWebcamBackground/', 'background.png',{defaultBackground:false,beforeScreenshot: async (page, browser) => {
-//     await new Promise(r => setTimeout(r, 1000));
-// }});
-
-// await setWallpaper('background.png');
-// // await getWallpaper();
-
-const fs = require("fs");
-const nodeHtmlToImage = require("node-html-to-image");
-const wallpaper = require("wallpaper");
-const cron = require("node-cron");
-const { v4: uuidv4 } = require("uuid");
-
-// Read html file
-const html = fs.readFileSync("./index.html", function (err, html) {
-  if (err) {
-    throw err;
-  }
-  return html;
-});
-// Running every 5 minutes
-cron.schedule("0/5 * * * *", () => {
+cron.schedule("* * * * *", async () => {
   // Generate a unique name for new wallpaper
   const imgPath = `./grachenBackground${uuidv4()}.png`;
 
   // Create image from html file
-  nodeHtmlToImage({
-    output: imgPath,
-    html: html.toString("utf-8"),
-  }).then(() => {
-    console.log("The image was created successfully!");
-    //Remove last wallpaper image file if exists
-    wallpaper.get().then((oldFile) => {
-      if (oldFile.includes("grachenBackground")) {
-        fs.unlink(oldFile, (err) => {
-          if (err) {
-            console.error(err);
-            return;
-          }
-          console.log("Last image successfully removed");
-        });
-      }
-    });
+  lastCameraNumberIndex++;
+  if (lastCameraNumberIndex >= cameraNumbers.length) lastCameraNumberIndex = 0;
+  await captureWebsite.file(getUrl(cameraNumbers[lastCameraNumberIndex]), imgPath, {
+    beforeScreenshot: async (page, browser) => {
+      await new Promise(r => setTimeout(r, 2500));
+    }, width: 1920, height: 1080
+  });
+  console.log("The image was created successfully!", cameraNumbers[lastCameraNumberIndex]);
+  //Remove last wallpaper image file if exists
+  getWallpaper().then((oldFile) => {
+    if (oldFile.includes("grachenBackground")) {
+      fs.unlink(oldFile, (err) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        console.log("Last image successfully removed", oldFile);
+      });
+    }
+  });
 
-    // Set wallpaper with new image
-    wallpaper.set(imgPath).then((err) => {
-      console.log("Wallpaper set successfully");
-    });
+  // Set wallpaper with new image
+  setWallpaper(imgPath).then((err) => {
+    console.log("Wallpaper set successfully", imgPath);
   });
 });
