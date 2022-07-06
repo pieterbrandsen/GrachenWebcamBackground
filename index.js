@@ -13,7 +13,7 @@ return `https://www.steinbock77.ch/webcam_${webcamNumber}/bilder/mega${dayNumber
 }
 
 
-cron.schedule("* * * * *", async () => {
+cron.schedule("5/1 * * * *", async () => {
   // Generate a unique name for new wallpaper
   const imgPath = `./grachenBackground${uuidv4()}.png`;
 
